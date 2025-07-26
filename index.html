@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --accent: #00bfa6;
+      --dark-bg: #121212;
+      --light-bg: #f9f9f9;
+      --dark-text: #eaeaea;
+      --light-text: #2a2a2a;
+    }
+    *, *::before, *::after {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background: var(--light-bg);
+      color: var(--light-text);
+      opacity: 0;
+      transition: opacity 0.5s ease, background 0.4s, color 0.4s;
+    }
+    body.loaded { opacity: 1; }
+    body.dark { background: var(--dark-bg); color: var(--dark-text); }
+    header, footer {
+      background: var(--dark-bg);
+      color: white;
+    }
+    header {
+      position: fixed;
+      top: 0; width: 100%;
+      padding: 1rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    nav a {
+      color: white; text-decoration: none;
+      margin: 0 1rem; font-weight: 500;
+      transition: 0.3s ease;
+    }
+    nav a:hover { color: var(--accent); }
+    .menu-toggle, .dark-toggle {
+      display: none; cursor: pointer;
+      font-size: 1.7rem; margin-left: 1rem;
+    }
+
+    /* Spacing between sections */
+    section {
+      padding: 100px 20px 80px;
+      margin-bottom: 60px;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0; transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+    section.visible { opacity: 1; transform: translateY(0); }
+
+    h2 {
+      font-size: 2rem; color: var(--primary);
+      margin-bottom: 2rem; text-align: center;
+    }
+
+    p { margin-bottom: 1rem; }
+
+    button {
+      background: var(--primary); color: white;
+      border: none; padding: 0.7rem 1.5rem;
+      border-radius: 8px; font-size: 1rem; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      margin: 0.4rem;
+    }
+    button:hover {
+      background: var(--accent); transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+    }
+
+    .skills-container, .projects-container, .testimonials-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .skill, .project, .testimonial {
+      background: white; padding: 1.2rem;
+      border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      text-align: center; transition: transform 0.3s ease;
+    }
+    .skill:hover, .project:hover, .testimonial:hover {
+      transform: translateY(-5px);
+    }
+    body.dark .skill, body.dark .project, body.dark .testimonial {
+      background: #1e1e1e; color: white;
+    }
+
+    .filters { text-align: center; margin-bottom: 1rem; }
+    .filters button {
+      margin: 0.4rem;
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--primary);
+      background: transparent; color: var(--primary);
+      font-weight: bold; border-radius: 6px;
+      transition: 0.3s ease;
+    }
+    .filters button:hover {
+      background: var(--primary); color: white;
+    }
+
+    /* Lightbox */
+    #lightbox {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.85);
+      display:none; justify-content:center; align-items:center;
+      z-index:10000;
+    }
+    #lightbox img {
+      max-width:90%; max-height:90%;
+      border:6px solid white; border-radius:10px;
+      margin:1rem;
+    }
+
+    footer {
+      text-align:center; padding:1.2rem;
+      margin-top:4rem;
+    }
+
+    @media(max-width:768px) {
+      nav {
+        display:none; flex-direction:column;
+        background:var(--dark-bg); position:absolute;
+        top:60px; right:0; width:220px;
+        padding:1rem; box-shadow:-2px 2px 10px rgba(0,0,0,0.3);
+      }
+      nav.active { display:flex; }
+      .menu-toggle, .dark-toggle { display:inline; }
+    }
+
+    .social-icons a {
+  display: inline-block;
+  margin: 0 0.5rem;
+  color: white;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.social-icons a:hover {
+  color: #00ffff;
+}
+
+.hero-img img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+    
+  </style>
+</head>
+<body>
+  <div id="loader">Loading Portfolio...</div>
+
+  <header>
+    <h1>Tirth' Portfolio</h1>
+    <div>
+      <span class="menu-toggle" onclick="toggleMenu()">☰</span>
+      <span class="dark-toggle" onclick="toggleDarkMode()">🌙</span>
+    </div>
+    <nav id="navbar">
+      <a href="#home">Home</a><a href="#about">About</a>
+      <a href="#skills">Skills</a><a href="#projects">Projects</a>
+      <a href="#testimonials">Testimonials</a><a href="#resume">Resume</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+   <div class="hero-img">
+      <img src="your-photo.jpg" alt="Profile Photo" />
+    </div>
+
+  <section id="home">
+    <h2><span id="typed"></span></h2>
+    <p>Creating clean, responsive web experiences.</p>
+    <button onclick="openResume()">📄 View Resume</button>
+  </section>
+
+  <section id="about">
+    <h2>About Me</h2>
+    <p>I'm a full-stack developer passionate about building performant, user-centric websites with React, Node.js, PHP, MySQL, and more.</p>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-container">
+      <div class="skill"><i class="bi bi-filetype-html" style="color:orangered;"></i> HTML</div>
+      <div class="skill"><i class="bi bi-filetype-css" style="color:blue;"></i> CSS</div>
+      <div class="skill"><i class="bi bi-filetype-js" style="color:gold;"></i> JavaScript</div>
+      <div class="skill"><img src="https://cdn.worldvectorlogo.com/logos/react-2.svg" style="height:20px;margin-right:5px;vertical-align:middle;"> React</div>
+      <div class="skill"><img src="https://cdn.worldvectorlogo.com/logos/nodejs-icon.svg" style="height:20px;margin-right:5px;vertical-align:middle;"> Node.js</div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="filters">
+      <button onclick="filterProjects('all')">All</button>
+      <button onclick="filterProjects('react')">React</button>
+      <button onclick="filterProjects('php')">PHP</button>
+    </div>
+    <div class="projects-container">
+      <div class="project react show" onclick="openLightbox('https://via.placeholder.com/600x400?text=React+App')">
+        <h3><img src="https://cdn.worldvectorlogo.com/logos/react-2.svg" style="height:16px;vertical-align:middle;margin-right:4px;">Chat App</h3>
+        <p>React + Firebase real-time chat</p>
+      </div>
+      <div class="project php show" onclick="openLightbox('https://via.placeholder.com/600x400?text=PHP+App')">
+        <h3><i class="bi bi-filetype-php" style="vertical-align:middle;margin-right:4px;"></i>Password Manager</h3>
+        <p>PHP & MySQL credential vault</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials">
+    <h2>Testimonials</h2>
+    <div class="testimonials-container">
+      <div class="testimonial">
+        <p>"Tirth is talented, communicative, and timely — highly recommend!"</p>
+        <h4>- Client A</h4>
+      </div>
+      <div class="testimonial">
+        <p>"Excellent code, exceeded expectations, will work again."</p>
+        <h4>- Client B</h4>
+      </div>
+    </div>
+  </section>
+
+  <section id="resume">
+    <h2>Resume</h2>
+    <iframe src="your-resume.pdf"></iframe>
+    <button onclick="closeResume()">Close Resume</button>
+  </section>
+
+  <section id="contact">
+    <h2>Contact Me</h2>
+      <div class="social-icons">
+          <a href="https://github.com/yourusername" target="_blank">🐱 GitHub</a>
+          <a href="https://linkedin.com/in/yourusername" target="_blank">💼 LinkedIn</a>
+          <a href="mailto:you@example.com">📧 Email</a>
+        </div> 
+          
+  </section>
+
+  <footer>
+    <p>&copy; Tirth patel.2025 All rights reserved.</p>
+  </footer>
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Preview" />
+  </div>
+
+  <script>
+    window.addEventListener("load", () => {
+      document.body.classList.add("loaded");
+      document.getElementById("loader").style.display = "none";
+    });
+    function toggleMenu() {
+      document.getElementById('navbar').classList.toggle('active');
+    }
+    function toggleDarkMode() {
+      const isDark = !document.body.classList.contains('dark');
+      document.body.classList.toggle('dark', isDark);
+      localStorage.setItem('darkMode', isDark);
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      const darkPref = localStorage.getItem('darkMode') === 'true';
+      document.body.classList.toggle('dark', darkPref);
+    });
+    const roles = ["Web Developer", "React Lover", "Problem Solver"];
+    let r = 0, c = 0, isDel = false;
+    const typedEl = document.getElementById("typed");
+    function typeRole() {
+      const current = roles[r];
+      typedEl.textContent = isDel
+        ? current.substring(0, c--)
+        : current.substring(0, c++);
+      if (!isDel && c > current.length) {
+        isDel = true; setTimeout(typeRole, 1000);
+      } else if (isDel && c === 0) {
+        isDel = false; r = (r + 1) % roles.length;
+        setTimeout(typeRole, 300);
+      } else {
+        setTimeout(typeRole, isDel ? 50 : 150);
+      }
+    }
+    window.addEventListener("DOMContentLoaded", typeRole);
+    function filterProjects(type) {
+      document.querySelectorAll(".project").forEach(el => {
+        el.style.display = (type === 'all' || el.classList.contains(type)) ? 'block' : 'none';
+      });
+    }
+    function openLightbox(src) {
+      document.getElementById("lightbox-img").src = src;
+      document.getElementById("lightbox").style.display = "flex";
+    }
+    function closeLightbox() {
+      document.getElementById("lightbox").style.display = "none";
+    }
+    function openResume() {
+      document.getElementById("resume").scrollIntoView({behavior:'smooth'});
+    }
+    function closeResume() {
+      window.scrollTo({top:document.getElementById("resume").offsetTop, behavior:'smooth'});
+    }
+    const sections = document.querySelectorAll("section");
+    window.addEventListener("scroll", () => {
+      const trigger = window.innerHeight / 1.2;
+      sections.forEach(s => {
+        if (s.getBoundingClientRect().top < trigger) {
+          s.classList.add("visible");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
