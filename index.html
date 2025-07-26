@@ -191,14 +191,13 @@
 
   <section id="home">
     <h2><span id="typed"></span></h2>
-    <p>Creating clean, responsive web experiences.</p>
+    <p>A passionate Web Developer creating beautiful web experiences.</p>
     <button onclick="openResume()">📄 View Resume</button>
   </section>
 
   <section id="about">
     <h2>About Me</h2>
-    <p>I'm a full-stack developer passionate about building performant, user-centric websites with React, Node.js, PHP, MySQL, and more.</p>
-  </section>
+    <p>I'm a full-stack developer with experience in React, PHP, MySQL, Firebase, and more. I love solving real-world problems with elegant code.</p>
 
   <section id="skills">
     <h2>Skills</h2>
@@ -225,7 +224,7 @@
       </div>
       <div class="project php show" onclick="openLightbox('https://via.placeholder.com/600x400?text=PHP+App')">
         <h3><i class="bi bi-filetype-php" style="vertical-align:middle;margin-right:4px;"></i>Password Manager</h3>
-        <p>PHP & MySQL credential vault</p>
+        <p>React Js with PHP & MySQL credential vault</p>
       </div>
     </div>
   </section>
@@ -244,24 +243,20 @@
     </div>
   </section>
 
-  <section id="resume">
-    <h2>Resume</h2>
-    <iframe src="your-resume.pdf"></iframe>
-    <button onclick="closeResume()">Close Resume</button>
+<section id="resume">
+    <h2>My Resume</h2>
+    <iframe src="https://example.com/your-resume.pdf"></iframe>
   </section>
 
   <section id="contact">
-    <h2>Contact Me</h2>
-      <div class="social-icons">
-          <a href="https://github.com/yourusername" target="_blank">🐱 GitHub</a>
-          <a href="https://linkedin.com/in/yourusername" target="_blank">💼 LinkedIn</a>
-          <a href="mailto:you@example.com">📧 Email</a>
-        </div> 
-          
+     <h2>Contact Me</h2>
+    <p>Email: tirthpatel28@example.com</p>
+    <p>Phone: +91 12345 67890</p>
+    <p>LinkedIn: linkedin.com/in/Tirthpatel</p>
   </section>
 
   <footer>
-    <p>&copy; Tirth patel.2025 All rights reserved.</p>
+    <p>&copy; 2025 Tirth Patel. All rights reserved.</p>
   </footer>
 
   <div id="lightbox" onclick="closeLightbox()">
@@ -318,9 +313,7 @@
     function openResume() {
       document.getElementById("resume").scrollIntoView({behavior:'smooth'});
     }
-    function closeResume() {
-      window.scrollTo({top:document.getElementById("resume").offsetTop, behavior:'smooth'});
-    }
+   
     const sections = document.querySelectorAll("section");
     window.addEventListener("scroll", () => {
       const trigger = window.innerHeight / 1.2;
